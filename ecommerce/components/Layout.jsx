@@ -1,11 +1,23 @@
-import React from 'react'
+import React from "react";
+import Head from "next/head";
+import Footer from "./Footer";
+import Navbar from "./Navbar";
 
-const Layout = () => {
+const Layout = ({ children }) => {
   return (
-    <div>
-      
+    <div className="layout">
+      <Head>
+        <title>Ecommerce Store</title>
+      </Head>
+      <header>
+        <Navbar />
+      </header>
+      <main className="main-container">{children}</main>
+      <footer>
+        <Footer />
+      </footer>
     </div>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;
