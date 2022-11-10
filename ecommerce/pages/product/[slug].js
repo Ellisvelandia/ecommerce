@@ -1,17 +1,26 @@
 import React, { useState } from "react";
-import { client, urlFor } from "../../lib/client";
 import {
   AiOutlineMinus,
   AiOutlinePlus,
   AiFillStar,
   AiOutlineStar,
 } from "react-icons/ai";
+
+import { client, urlFor } from "../../lib/client";
 import { Product } from "../../components";
+import { useStateContext } from "../../context/StateContext";
 
-const productDetails = ({ product, products }) => {
-  const [index, setIndex] = useState(0);
-
+const ProductDetails = ({ product, products }) => {
   const { image, name, details, price } = product;
+  const [index, setIndex] = useState(0);
+  const { decQty, incQty, qty, onAdd, setShowCart } = useStateContext();
+
+  const handleBuyNow = () => {
+    onAdd(product, qty);
+
+    setShowCart(true);
+  };
+
   return (
     <div>
       <div className="product-detail-container">
@@ -19,7 +28,6 @@ const productDetails = ({ product, products }) => {
           <div className="image-container">
             <img
               src={urlFor(image && image[index])}
-              alt="image"
               className="product-detail-image"
             />
           </div>
@@ -36,6 +44,7 @@ const productDetails = ({ product, products }) => {
             ))}
           </div>
         </div>
+
         <div className="product-detail-desc">
           <h1>{name}</h1>
           <div className="reviews">
@@ -54,11 +63,11 @@ const productDetails = ({ product, products }) => {
           <div className="quantity">
             <h3>Quantity:</h3>
             <p className="quantity-desc">
-              <span className="minus">
+              <span className="minus" onClick={decQty}>
                 <AiOutlineMinus />
               </span>
-              <span className="num"></span>
-              <span className="plus">
+              <span className="num">{qty}</span>
+              <span className="plus" onClick={incQty}>
                 <AiOutlinePlus />
               </span>
             </p>
@@ -67,13 +76,13 @@ const productDetails = ({ product, products }) => {
             <button
               type="button"
               className="add-to-cart"
-              // onClick={() => onAdd(product, qty)}
+              onClick={() => onAdd(product, qty)}
             >
               Add to Cart
             </button>
-            {/* <button type="button" className="buy-now" onClick={handleBuyNow}> */}
-              {/* Buy Now */}
-            {/* </button> */}
+            <button type="button" className="buy-now" onClick={handleBuyNow}>
+              Buy Now
+            </button>
           </div>
         </div>
       </div>
@@ -128,4 +137,4 @@ export const getStaticProps = async ({ params: { slug } }) => {
   };
 };
 
-export default productDetails;
+export default ProductDetails;
